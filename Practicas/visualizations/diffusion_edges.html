@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 500px;
+                 background-color: white;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "0", "label": "0", "shape": "dot", "x": 78.89131263590632, "y": -250.88805785817374}, {"color": "#97c2fc", "id": "1", "label": "1", "shape": "dot", "x": -8.702481477469023, "y": 133.93860145102812}, {"color": "#97c2fc", "id": "2", "label": "2", "shape": "dot", "x": 35.83902564472104, "y": 45.457264952268815}, {"color": "#97c2fc", "id": "3", "label": "3", "shape": "dot", "x": -149.48933409956726, "y": 144.87965047619215}, {"color": "#97c2fc", "id": "4", "label": "4", "shape": "dot", "x": 108.84940046656844, "y": 109.24591130284097}, {"color": "#97c2fc", "id": "5", "label": "5", "shape": "dot", "x": 32.95121974779765, "y": 157.02754027457274}, {"color": "#97c2fc", "id": "6", "label": "6", "shape": "dot", "x": -37.38807486910026, "y": 23.821276465434487}, {"color": "#97c2fc", "id": "7", "label": "7", "shape": "dot", "x": -152.93993473843128, "y": 42.49878823759836}, {"color": "#97c2fc", "id": "8", "label": "8", "shape": "dot", "x": -0.320193029744446, "y": 223.18764449148617}, {"color": "#97c2fc", "id": "9", "label": "9", "shape": "dot", "x": -77.80162456660754, "y": 194.05835919107466}, {"color": "#97c2fc", "id": "10", "label": "10", "shape": "dot", "x": 152.5991631949434, "y": 207.4367552401711}, {"color": "#97c2fc", "id": "11", "label": "11", "shape": "dot", "x": 88.55819779538808, "y": -10.211933542292405}, {"color": "#97c2fc", "id": "12", "label": "12", "shape": "dot", "x": -211.54036114609343, "y": -2.139225825995496}, {"color": "#97c2fc", "id": "13", "label": "13", "shape": "dot", "x": -123.05170680302903, "y": -58.26246492990368}, {"color": "#97c2fc", "id": "14", "label": "14", "shape": "dot", "x": -7.809772154419832, "y": -93.42393658287865}, {"color": "#97c2fc", "id": "15", "label": "15", "shape": "dot", "x": -124.27550948034113, "y": -157.7774952556939}, {"color": "#97c2fc", "id": "16", "label": "16", "shape": "dot", "x": 232.69173747640926, "y": 139.06685276318925}, {"color": "#97c2fc", "id": "17", "label": "17", "shape": "dot", "x": 183.21306986063252, "y": 295.83663037324766}, {"color": "#97c2fc", "id": "18", "label": "18", "shape": "dot", "x": 34.00908551061269, "y": 345.1378222874579}, {"color": "#97c2fc", "id": "19", "label": "19", "shape": "dot", "x": 306.7415385064302, "y": 18.08462138249018}, {"color": "#97c2fc", "id": "20", "label": "20", "shape": "dot", "x": -226.29739776427985, "y": 259.5439587488697}, {"color": "#97c2fc", "id": "21", "label": "21", "shape": "dot", "x": 625.6554994423904, "y": 27.3870915226553}, {"color": "#97c2fc", "id": "22", "label": "22", "shape": "dot", "x": 337.5990865533157, "y": -161.1157744596606}, {"color": "#97c2fc", "id": "23", "label": "23", "shape": "dot", "x": 44.5208068321248, "y": 522.5451566249949}, {"color": "#97c2fc", "id": "24", "label": "24", "shape": "dot", "x": -270.7167405753004, "y": 166.52698987055211}, {"color": "#97c2fc", "id": "25", "label": "25", "shape": "dot", "x": -258.34129463891173, "y": -271.1434766319756}, {"color": "#97c2fc", "id": "26", "label": "26", "shape": "dot", "x": -141.06554014230272, "y": 369.4726741836819}, {"color": "#97c2fc", "id": "27", "label": "27", "shape": "dot", "x": 213.7612152789198, "y": -131.25692862402659}, {"color": "#97c2fc", "id": "28", "label": "28", "shape": "dot", "x": -166.01497252282445, "y": 865.9948308107093}, {"color": "#97c2fc", "id": "29", "label": "29", "shape": "dot", "x": -346.01128486860824, "y": -884.6754818412671}, {"color": "#97c2fc", "id": "30", "label": "30", "shape": "dot", "x": 614.5047550179423, "y": -395.75436882651053}, {"color": "#97c2fc", "id": "31", "label": "31", "shape": "dot", "x": 380.3613609811787, "y": -494.82041187074486}, {"color": "#97c2fc", "id": "32", "label": "32", "shape": "dot", "x": 599.9181111651664, "y": -190.57124627729726}, {"color": "#97c2fc", "id": "33", "label": "33", "shape": "dot", "x": -16.821828332604635, "y": -1000.0}, {"color": "#97c2fc", "id": "34", "label": "34", "shape": "dot", "x": -792.4655502606578, "y": 114.30945555232489}, {"color": "#97c2fc", "id": "35", "label": "35", "shape": "dot", "x": -400.3107309939869, "y": -571.469083845872}, {"color": "#97c2fc", "id": "36", "label": "36", "shape": "dot", "x": 537.6733621272882, "y": 731.1165840026262}, {"color": "#97c2fc", "id": "37", "label": "37", "shape": "dot", "x": -100.90399169760367, "y": -324.9355862272302}, {"color": "#97c2fc", "id": "38", "label": "38", "shape": "dot", "x": -343.6170593194141, "y": 74.74752001474577}, {"color": "#97c2fc", "id": "39", "label": "39", "shape": "dot", "x": -715.5963196698544, "y": 710.6783222023505}, {"color": "#97c2fc", "id": "40", "label": "40", "shape": "dot", "x": 404.2063557619388, "y": 243.3141630355789}, {"color": "#97c2fc", "id": "41", "label": "41", "shape": "dot", "x": -401.06375223641504, "y": 768.7743225333815}, {"color": "#97c2fc", "id": "42", "label": "42", "shape": "dot", "x": -572.5795303593239, "y": 604.6681501676377}, {"color": "#97c2fc", "id": "43", "label": "43", "shape": "dot", "x": 131.75180748687532, "y": 902.8767604948747}, {"color": "#97c2fc", "id": "44", "label": "44", "shape": "dot", "x": -172.68629026940616, "y": -957.9121745680656}, {"color": "#97c2fc", "id": "45", "label": "45", "shape": "dot", "x": 135.48211883569633, "y": -358.1670886256229}, {"color": "#97c2fc", "id": "46", "label": "46", "shape": "dot", "x": 216.47396192849547, "y": 659.7148724399477}, {"color": "#97c2fc", "id": "47", "label": "47", "shape": "dot", "x": 353.83582643229636, "y": 147.50213760533023}, {"color": "#97c2fc", "id": "48", "label": "48", "shape": "dot", "x": -447.45173580726015, "y": -406.0491301808541}, {"color": "#97c2fc", "id": "49", "label": "49", "shape": "dot", "x": -355.1715763636422, "y": 929.2575488963549}, {"color": "#97c2fc", "id": "50", "label": "50", "shape": "dot", "x": 431.7350116272233, "y": 504.1203715360841}, {"color": "#97c2fc", "id": "51", "label": "51", "shape": "dot", "x": -760.2704285717122, "y": -168.77284579584432}, {"color": "#97c2fc", "id": "52", "label": "52", "shape": "dot", "x": 7.1846491276913635, "y": 932.5724239038127}, {"color": "#97c2fc", "id": "53", "label": "53", "shape": "dot", "x": 781.0440202013127, "y": 331.5692111251609}, {"color": "#97c2fc", "id": "54", "label": "54", "shape": "dot", "x": -903.0317902949643, "y": 346.3400750807667}, {"color": "#97c2fc", "id": "55", "label": "55", "shape": "dot", "x": 457.9221768366974, "y": -342.28643825175146}, {"color": "#97c2fc", "id": "56", "label": "56", "shape": "dot", "x": -360.2222115609835, "y": -294.4638262549304}, {"color": "#97c2fc", "id": "57", "label": "57", "shape": "dot", "x": 134.46725823723816, "y": -987.7829467296966}, {"color": "#97c2fc", "id": "58", "label": "58", "shape": "dot", "x": -489.62095062164366, "y": -60.86122773298739}, {"color": "#97c2fc", "id": "59", "label": "59", "shape": "dot", "x": 568.1119914937611, "y": -827.0164235832656}, {"color": "#97c2fc", "id": "60", "label": "60", "shape": "dot", "x": 710.1156069290913, "y": -691.2857832877099}, {"color": "#97c2fc", "id": "61", "label": "61", "shape": "dot", "x": 283.78664249068487, "y": -973.0006496113025}, {"color": "#97c2fc", "id": "62", "label": "62", "shape": "dot", "x": 520.1336897257577, "y": -71.67726859842575}, {"color": "#97c2fc", "id": "63", "label": "63", "shape": "dot", "x": -361.2169557647002, "y": -136.16650645708214}, {"color": "#97c2fc", "id": "64", "label": "64", "shape": "dot", "x": -694.837656063306, "y": 450.0916855844554}, {"color": "#97c2fc", "id": "65", "label": "65", "shape": "dot", "x": 424.6372142064525, "y": -908.2700821853488}, {"color": "#97c2fc", "id": "66", "label": "66", "shape": "dot", "x": 20.408301505564193, "y": -560.644160363539}]);
+                  edges = new vis.DataSet([{"color": "#a0a0a0ff", "from": "0", "title": "12.50", "to": "1"}, {"color": "#a0a0a0ff", "from": "0", "title": "12.50", "to": "2"}, {"color": "#a6a6a6ff", "from": "0", "title": "12.00", "to": "3"}, {"color": "#a0a0a0ff", "from": "0", "title": "12.50", "to": "4"}, {"color": "#999999ff", "from": "0", "title": "13.00", "to": "5"}, {"color": "#6f6f6fff", "from": "0", "title": "16.50", "to": "6"}, {"color": "#757575ff", "from": "0", "title": "16.00", "to": "7"}, {"color": "#757575ff", "from": "0", "title": "16.00", "to": "8"}, {"color": "#757575ff", "from": "0", "title": "16.00", "to": "9"}, {"color": "#4b4b4bff", "from": "0", "title": "19.50", "to": "10"}, {"color": "#636363ff", "from": "0", "title": "17.50", "to": "11"}, {"color": "#585858ff", "from": "0", "title": "18.50", "to": "12"}, {"color": "#5e5e5eff", "from": "0", "title": "18.00", "to": "13"}, {"color": "#585858ff", "from": "0", "title": "18.50", "to": "14"}, {"color": "#444444ff", "from": "0", "title": "20.00", "to": "15"}, {"color": "#3d3d3dff", "from": "0", "title": "20.50", "to": "16"}, {"color": "#3d3d3dff", "from": "0", "title": "20.50", "to": "17"}, {"color": "#343434ff", "from": "0", "title": "21.00", "to": "18"}, {"color": "#252525ff", "from": "0", "title": "22.00", "to": "19"}, {"color": "#343434ff", "from": "0", "title": "21.00", "to": "20"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "21"}, {"color": "#121212ff", "from": "0", "title": "23.50", "to": "22"}, {"color": "#343434ff", "from": "0", "title": "21.00", "to": "24"}, {"color": "#181818ff", "from": "0", "title": "23.00", "to": "25"}, {"color": "#252525ff", "from": "0", "title": "22.00", "to": "26"}, {"color": "#1f1f1fff", "from": "0", "title": "22.50", "to": "27"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "29"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "31"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "32"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "33"}, {"color": "#181818ff", "from": "0", "title": "23.00", "to": "37"}, {"color": "#252525ff", "from": "0", "title": "22.00", "to": "38"}, {"color": "#181818ff", "from": "0", "title": "23.00", "to": "40"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "44"}, {"color": "#121212ff", "from": "0", "title": "23.50", "to": "45"}, {"color": "#1f1f1fff", "from": "0", "title": "22.50", "to": "47"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "48"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "55"}, {"color": "#121212ff", "from": "0", "title": "23.50", "to": "56"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "57"}, {"color": "#121212ff", "from": "0", "title": "23.50", "to": "58"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "59"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "60"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "61"}, {"color": "#121212ff", "from": "0", "title": "23.50", "to": "62"}, {"color": "#181818ff", "from": "0", "title": "23.00", "to": "63"}, {"color": "#050505ff", "from": "0", "title": "24.50", "to": "65"}, {"color": "#0b0b0bff", "from": "0", "title": "24.00", "to": "66"}, {"color": "#8c8c8cff", "from": "1", "title": "14.00", "to": "2"}, {"color": "#a0a0a0ff", "from": "1", "title": "12.50", "to": "3"}, {"color": "#8c8c8cff", "from": "1", "title": "14.00", "to": "4"}, {"color": "#939393ff", "from": "1", "title": "13.50", "to": "5"}, {"color": "#6a6a6aff", "from": "1", "title": "17.00", "to": "6"}, {"color": "#6f6f6fff", "from": "1", "title": "16.50", "to": "7"}, {"color": "#6f6f6fff", "from": "1", "title": "16.50", "to": "8"}, {"color": "#6f6f6fff", "from": "1", "title": "16.50", "to": "9"}, {"color": "#444444ff", "from": "1", "title": "20.00", "to": "10"}, {"color": "#5e5e5eff", "from": "1", "title": "18.00", "to": "11"}, {"color": "#535353ff", "from": "1", "title": "19.00", "to": "12"}, {"color": "#585858ff", "from": "1", "title": "18.50", "to": "13"}, {"color": "#535353ff", "from": "1", "title": "19.00", "to": "14"}, {"color": "#3d3d3dff", "from": "1", "title": "20.50", "to": "15"}, {"color": "#343434ff", "from": "1", "title": "21.00", "to": "16"}, {"color": "#343434ff", "from": "1", "title": "21.00", "to": "17"}, {"color": "#2d2d2dff", "from": "1", "title": "21.50", "to": "18"}, {"color": "#1f1f1fff", "from": "1", "title": "22.50", "to": "19"}, {"color": "#2d2d2dff", "from": "1", "title": "21.50", "to": "20"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "21"}, {"color": "#0b0b0bff", "from": "1", "title": "24.00", "to": "22"}, {"color": "#2d2d2dff", "from": "1", "title": "21.50", "to": "24"}, {"color": "#121212ff", "from": "1", "title": "23.50", "to": "25"}, {"color": "#1f1f1fff", "from": "1", "title": "22.50", "to": "26"}, {"color": "#181818ff", "from": "1", "title": "23.00", "to": "27"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "28"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "30"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "32"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "34"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "36"}, {"color": "#121212ff", "from": "1", "title": "23.50", "to": "37"}, {"color": "#1f1f1fff", "from": "1", "title": "22.50", "to": "38"}, {"color": "#121212ff", "from": "1", "title": "23.50", "to": "40"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "41"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "42"}, {"color": "#0b0b0bff", "from": "1", "title": "24.00", "to": "45"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "46"}, {"color": "#181818ff", "from": "1", "title": "23.00", "to": "47"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "50"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "51"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "52"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "53"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "55"}, {"color": "#0b0b0bff", "from": "1", "title": "24.00", "to": "56"}, {"color": "#0b0b0bff", "from": "1", "title": "24.00", "to": "58"}, {"color": "#121212ff", "from": "1", "title": "23.50", "to": "63"}, {"color": "#000000ff", "from": "1", "title": "25.00", "to": "64"}, {"color": "#050505ff", "from": "1", "title": "24.50", "to": "66"}, {"color": "#c4c4c4ff", "from": "2", "title": "9.50", "to": "3"}, {"color": "#e3e3e3ff", "from": "2", "title": "6.00", "to": "4"}, {"color": "#e7e7e7ff", "from": "2", "title": "5.50", "to": "5"}, {"color": "#dcdcdcff", "from": "2", "title": "7.00", "to": "6"}, {"color": "#cececeff", "from": "2", "title": "8.50", "to": "7"}, {"color": "#e0e0e0ff", "from": "2", "title": "6.50", "to": "8"}, {"color": "#d7d7d7ff", "from": "2", "title": "7.50", "to": "9"}, {"color": "#c0c0c0ff", "from": "2", "title": "10.00", "to": "10"}, {"color": "#d3d3d3ff", "from": "2", "title": "8.00", "to": "11"}, {"color": "#c9c9c9ff", "from": "2", "title": "9.00", "to": "12"}, {"color": "#cececeff", "from": "2", "title": "8.50", "to": "13"}, {"color": "#c9c9c9ff", "from": "2", "title": "9.00", "to": "14"}, {"color": "#bababaff", "from": "2", "title": "10.50", "to": "15"}, {"color": "#b3b3b3ff", "from": "2", "title": "11.00", "to": "16"}, {"color": "#b3b3b3ff", "from": "2", "title": "11.00", "to": "17"}, {"color": "#adadadff", "from": "2", "title": "11.50", "to": "18"}, {"color": "#a0a0a0ff", "from": "2", "title": "12.50", "to": "19"}, {"color": "#adadadff", "from": "2", "title": "11.50", "to": "20"}, {"color": "#939393ff", "from": "2", "title": "13.50", "to": "23"}, {"color": "#adadadff", "from": "2", "title": "11.50", "to": "24"}, {"color": "#999999ff", "from": "2", "title": "13.00", "to": "27"}, {"color": "#939393ff", "from": "2", "title": "13.50", "to": "37"}, {"color": "#939393ff", "from": "2", "title": "13.50", "to": "40"}, {"color": "#878787ff", "from": "2", "title": "14.50", "to": "48"}, {"color": "#878787ff", "from": "2", "title": "14.50", "to": "50"}, {"color": "#8c8c8cff", "from": "2", "title": "14.00", "to": "62"}, {"color": "#939393ff", "from": "2", "title": "13.50", "to": "63"}, {"color": "#c4c4c4ff", "from": "3", "title": "9.50", "to": "4"}, {"color": "#dcdcdcff", "from": "3", "title": "7.00", "to": "5"}, {"color": "#adadadff", "from": "3", "title": "11.50", "to": "6"}, {"color": "#b3b3b3ff", "from": "3", "title": "11.00", "to": "7"}, {"color": "#b3b3b3ff", "from": "3", "title": "11.00", "to": "8"}, {"color": "#b3b3b3ff", "from": "3", "title": "11.00", "to": "9"}, {"color": "#878787ff", "from": "3", "title": "14.50", "to": "10"}, {"color": "#a0a0a0ff", "from": "3", "title": "12.50", "to": "11"}, {"color": "#939393ff", "from": "3", "title": "13.50", "to": "12"}, {"color": "#999999ff", "from": "3", "title": "13.00", "to": "13"}, {"color": "#939393ff", "from": "3", "title": "13.50", "to": "14"}, {"color": "#808080ff", "from": "3", "title": "15.00", "to": "15"}, {"color": "#7b7b7bff", "from": "3", "title": "15.50", "to": "16"}, {"color": "#7b7b7bff", "from": "3", "title": "15.50", "to": "17"}, {"color": "#757575ff", "from": "3", "title": "16.00", "to": "18"}, {"color": "#6a6a6aff", "from": "3", "title": "17.00", "to": "19"}, {"color": "#757575ff", "from": "3", "title": "16.00", "to": "20"}, {"color": "#585858ff", "from": "3", "title": "18.50", "to": "22"}, {"color": "#5e5e5eff", "from": "3", "title": "18.00", "to": "23"}, {"color": "#757575ff", "from": "3", "title": "16.00", "to": "24"}, {"color": "#5e5e5eff", "from": "3", "title": "18.00", "to": "25"}, {"color": "#6a6a6aff", "from": "3", "title": "17.00", "to": "26"}, {"color": "#636363ff", "from": "3", "title": "17.50", "to": "27"}, {"color": "#4b4b4bff", "from": "3", "title": "19.50", "to": "35"}, {"color": "#5e5e5eff", "from": "3", "title": "18.00", "to": "37"}, {"color": "#6a6a6aff", "from": "3", "title": "17.00", "to": "38"}, {"color": "#4b4b4bff", "from": "3", "title": "19.50", "to": "39"}, {"color": "#4b4b4bff", "from": "3", "title": "19.50", "to": "43"}, {"color": "#585858ff", "from": "3", "title": "18.50", "to": "45"}, {"color": "#636363ff", "from": "3", "title": "17.50", "to": "47"}, {"color": "#4b4b4bff", "from": "3", "title": "19.50", "to": "49"}, {"color": "#4b4b4bff", "from": "3", "title": "19.50", "to": "54"}, {"color": "#585858ff", "from": "3", "title": "18.50", "to": "56"}, {"color": "#585858ff", "from": "3", "title": "18.50", "to": "58"}, {"color": "#5e5e5eff", "from": "3", "title": "18.00", "to": "63"}, {"color": "#f5f5f5ff", "from": "4", "title": "3.50", "to": "5"}, {"color": "#dcdcdcff", "from": "4", "title": "7.00", "to": "6"}, {"color": "#d7d7d7ff", "from": "4", "title": "7.50", "to": "7"}, {"color": "#e0e0e0ff", "from": "4", "title": "6.50", "to": "8"}, {"color": "#e0e0e0ff", "from": "4", "title": "6.50", "to": "9"}, {"color": "#c0c0c0ff", "from": "4", "title": "10.00", "to": "10"}, {"color": "#d3d3d3ff", "from": "4", "title": "8.00", "to": "11"}, {"color": "#c9c9c9ff", "from": "4", "title": "9.00", "to": "12"}, {"color": "#cececeff", "from": "4", "title": "8.50", "to": "13"}, {"color": "#c9c9c9ff", "from": "4", "title": "9.00", "to": "14"}, {"color": "#bababaff", "from": "4", "title": "10.50", "to": "15"}, {"color": "#b3b3b3ff", "from": "4", "title": "11.00", "to": "16"}, {"color": "#b3b3b3ff", "from": "4", "title": "11.00", "to": "17"}, {"color": "#adadadff", "from": "4", "title": "11.50", "to": "18"}, {"color": "#a0a0a0ff", "from": "4", "title": "12.50", "to": "19"}, {"color": "#adadadff", "from": "4", "title": "11.50", "to": "20"}, {"color": "#939393ff", "from": "4", "title": "13.50", "to": "23"}, {"color": "#adadadff", "from": "4", "title": "11.50", "to": "24"}, {"color": "#a0a0a0ff", "from": "4", "title": "12.50", "to": "26"}, {"color": "#878787ff", "from": "4", "title": "14.50", "to": "31"}, {"color": "#a0a0a0ff", "from": "4", "title": "12.50", "to": "38"}, {"color": "#939393ff", "from": "4", "title": "13.50", "to": "40"}, {"color": "#878787ff", "from": "4", "title": "14.50", "to": "46"}, {"color": "#999999ff", "from": "4", "title": "13.00", "to": "47"}, {"color": "#8c8c8cff", "from": "4", "title": "14.00", "to": "62"}, {"color": "#e7e7e7ff", "from": "5", "title": "5.50", "to": "6"}, {"color": "#e3e3e3ff", "from": "5", "title": "6.00", "to": "7"}, {"color": "#ebebebff", "from": "5", "title": "5.00", "to": "8"}, {"color": "#ebebebff", "from": "5", "title": "5.00", "to": "9"}, {"color": "#cececeff", "from": "5", "title": "8.50", "to": "10"}, {"color": "#e0e0e0ff", "from": "5", "title": "6.50", "to": "11"}, {"color": "#d7d7d7ff", "from": "5", "title": "7.50", "to": "12"}, {"color": "#dcdcdcff", "from": "5", "title": "7.00", "to": "13"}, {"color": "#d7d7d7ff", "from": "5", "title": "7.50", "to": "14"}, {"color": "#c9c9c9ff", "from": "5", "title": "9.00", "to": "15"}, {"color": "#c4c4c4ff", "from": "5", "title": "9.50", "to": "16"}, {"color": "#c4c4c4ff", "from": "5", "title": "9.50", "to": "17"}, {"color": "#c0c0c0ff", "from": "5", "title": "10.00", "to": "18"}, {"color": "#b3b3b3ff", "from": "5", "title": "11.00", "to": "19"}, {"color": "#c0c0c0ff", "from": "5", "title": "10.00", "to": "20"}, {"color": "#a6a6a6ff", "from": "5", "title": "12.00", "to": "23"}, {"color": "#c0c0c0ff", "from": "5", "title": "10.00", "to": "24"}, {"color": "#b3b3b3ff", "from": "5", "title": "11.00", "to": "26"}, {"color": "#adadadff", "from": "5", "title": "11.50", "to": "27"}, {"color": "#b3b3b3ff", "from": "5", "title": "11.00", "to": "38"}, {"color": "#adadadff", "from": "5", "title": "11.50", "to": "47"}, {"color": "#efefefff", "from": "6", "title": "4.50", "to": "7"}, {"color": "#fafafaff", "from": "6", "title": "2.50", "to": "8"}, {"color": "#f5f5f5ff", "from": "6", "title": "3.50", "to": "9"}, {"color": "#f2f2f2ff", "from": "6", "title": "4.00", "to": "10"}, {"color": "#f7f7f7ff", "from": "6", "title": "3.00", "to": "11"}, {"color": "#f7f7f7ff", "from": "6", "title": "3.00", "to": "12"}, {"color": "#fafafaff", "from": "6", "title": "2.50", "to": "13"}, {"color": "#f7f7f7ff", "from": "6", "title": "3.00", "to": "14"}, {"color": "#efefefff", "from": "6", "title": "4.50", "to": "15"}, {"color": "#ebebebff", "from": "6", "title": "5.00", "to": "16"}, {"color": "#e7e7e7ff", "from": "6", "title": "5.50", "to": "18"}, {"color": "#f2f2f2ff", "from": "7", "title": "4.00", "to": "8"}, {"color": "#f2f2f2ff", "from": "7", "title": "4.00", "to": "9"}, {"color": "#efefefff", "from": "7", "title": "4.50", "to": "10"}, {"color": "#f5f5f5ff", "from": "7", "title": "3.50", "to": "11"}, {"color": "#efefefff", "from": "7", "title": "4.50", "to": "12"}, {"color": "#f2f2f2ff", "from": "7", "title": "4.00", "to": "13"}, {"color": "#efefefff", "from": "7", "title": "4.50", "to": "14"}, {"color": "#e3e3e3ff", "from": "7", "title": "6.00", "to": "20"}, {"color": "#e3e3e3ff", "from": "7", "title": "6.00", "to": "24"}, {"color": "#d3d3d3ff", "from": "7", "title": "8.00", "to": "25"}, {"color": "#dcdcdcff", "from": "7", "title": "7.00", "to": "38"}, {"color": "#f7f7f7ff", "from": "8", "title": "3.00", "to": "9"}, {"color": "#efefefff", "from": "8", "title": "4.50", "to": "10"}, {"color": "#fafafaff", "from": "8", "title": "2.50", "to": "11"}, {"color": "#efefefff", "from": "8", "title": "4.50", "to": "12"}, {"color": "#f2f2f2ff", "from": "8", "title": "4.00", "to": "13"}, {"color": "#efefefff", "from": "8", "title": "4.50", "to": "14"}, {"color": "#e7e7e7ff", "from": "8", "title": "5.50", "to": "16"}, {"color": "#e7e7e7ff", "from": "8", "title": "5.50", "to": "17"}, {"color": "#e3e3e3ff", "from": "8", "title": "6.00", "to": "18"}, {"color": "#e3e3e3ff", "from": "8", "title": "6.00", "to": "24"}, {"color": "#efefefff", "from": "9", "title": "4.50", "to": "10"}, {"color": "#fafafaff", "from": "9", "title": "2.50", "to": "11"}, {"color": "#efefefff", "from": "9", "title": "4.50", "to": "12"}, {"color": "#f2f2f2ff", "from": "9", "title": "4.00", "to": "13"}, {"color": "#efefefff", "from": "9", "title": "4.50", "to": "14"}, {"color": "#e7e7e7ff", "from": "9", "title": "5.50", "to": "16"}, {"color": "#e7e7e7ff", "from": "9", "title": "5.50", "to": "17"}, {"color": "#e3e3e3ff", "from": "9", "title": "6.00", "to": "20"}, {"color": "#dcdcdcff", "from": "9", "title": "7.00", "to": "26"}, {"color": "#f7f7f7ff", "from": "10", "title": "3.00", "to": "11"}, {"color": "#f7f7f7ff", "from": "11", "title": "3.00", "to": "12"}, {"color": "#fafafaff", "from": "11", "title": "2.50", "to": "13"}, {"color": "#f7f7f7ff", "from": "11", "title": "3.00", "to": "14"}, {"color": "#f2f2f2ff", "from": "11", "title": "4.00", "to": "17"}, {"color": "#ffffffff", "from": "12", "title": "1.50", "to": "13"}, {"color": "#f5f5f5ff", "from": "12", "title": "3.50", "to": "15"}, {"color": "#ffffffff", "from": "13", "title": "1.50", "to": "14"}, {"color": "#f7f7f7ff", "from": "13", "title": "3.00", "to": "15"}, {"color": "#f5f5f5ff", "from": "14", "title": "3.50", "to": "15"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
