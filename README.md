@@ -1,5 +1,5 @@
 # Social Network Analysis 📝
-The content is divided into two main projects:
+In the path ./Practicas, the content is organized into two main projects:
 
 ## 1. Community Detection and Analysis
 In this project, a meso-level analysis of a social network is conducted. Using a dataset of hashtags collected during the 2020 U.S. elections, tasks include:
